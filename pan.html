@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Panadería</title>
+  <link rel="icon" href="pan.webp" type="imagen/webp">
+    <style>
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .receta {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            color: #2c3e50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .receta:hover {
+            transform: translateY(-3px);
+        }
+
+        .receta-header {
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .receta-header h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+        }
+
+        .receta-header img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .receta-contenido {
+            display: none;
+            padding: 15px;
+            border-top: 2px solid #eee;
+            margin-top: 10px;
+        }
+
+        .ingredientes {
+            margin: 15px 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .ingredientes div {
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tiempo-horno {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #e74c3c;
+        }
+
+        .controles {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .controles > div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Las recetas se generarán automáticamente con JavaScript -->
+    <div id="recetas-container"></div>
+
+    <script>
+        const recetas = [
+            {
+                nombre: 'Pan de bono',
+                ingredientes: [
+                    { nombre: 'queso costeño', cantidad: 500 },
+                    { nombre: 'almidón', cantidad: 500 },
+                    { nombre: 'mantequilla', cantidad: 250 },
+                    { nombre: 'maiz molido', cantidad: 250 },
+                    { nombre: 'azucar', cantidad: 25 }
+                ],
+                tiempo: '7.6 min'
+            },
+            {
+                nombre: 'Arepas',
+                ingredientes: [
+                    { nombre: 'queso costeño', cantidad: 500 },
+                    { nombre: 'almidón', cantidad: 250 },
+                    { nombre: 'arepa harina', cantidad: 800 },
+                    { nombre: 'mantequilla', cantidad: 625 },
+                    { nombre: 'azúcar', cantidad: 250 }
+                ],
+                tiempo: '5.0 min se le da vuelta 2.0 min'
+            },
+            {
+                nombre: 'Buñuelos',
+                ingredientes: [
+                    { nombre: 'queso costeño', cantidad: 500 },
+                    { nombre: 'almidón', cantidad: 450 },
+                    { nombre: 'colmaiz', cantidad: 500 },
+                    { nombre: 'huevos', cantidad: 3 },
+                    { nombre: 'azúcar', cantidad: 130 }
+                ],
+                tiempo: '7.6 min'
+            },
+            {
+                nombre: 'Almojabanas',
+                ingredientes: [
+                    { nombre: 'queso costeño', cantidad: 625 },
+                    { nombre: 'almidón', cantidad: 625 },
+                    { nombre: 'azúcar', cantidad: 125 },
+                    { nombre: 'colmaiz', cantidad: 125 },
+                    { nombre: 'arepa harina', cantidad: 125 },
+                    { nombre: 'huevo', cantidad: 1 }
+                ],
+                tiempo: '7.6 min'
+            },
+            {
+                nombre: 'Almojabanas especial',
+                ingredientes: [
+                    { nombre: 'queso cuajada', cantidad: 2000 },
+                    { nombre: 'harina de trigo', cantidad: 200 },
+                    { nombre: 'azúcar', cantidad: 140 },
+                    { nombre: 'leche en polvo', cantidad: 150 },
+                    { nombre: 'almidón', cantidad: 150 },
+                    { nombre: 'huevo', cantidad: 1 }
+                ],
+                tiempo: '150°C x 25 minutos'
+            }
+        ];
+
+        function crearRecetaHTML(receta) {
+            return `
+                <div class="receta">
+                    <div class="receta-header">
+                        <h3>${receta.nombre}</h3>
+                        <span>▼</span>
+                    </div>
+                    <div class="receta-contenido">
+                        <div class="ingredientes">
+                            ${receta.ingredientes.map(ing => `
+                                <div>
+                                    <span class="ingrediente-nombre">${ing.nombre}</span>:
+                                    <span class="ingrediente-cantidad" data-original="${ing.cantidad}">${ing.cantidad}g</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div>
+                            <input type="number" min="1" value="1" class="multiplicador" placeholder="Multiplicar por">
+                            <button onclick="multiplicarIngredientes(this)">Aplicar</button>
+                        </div>
+                        <div>
+                            <input type="number" min="1" value="1" class="fraccion" placeholder="Dividir por">
+                            <button onclick="dividirIngredientes(this)">Fraccionar</button>
+                        </div>
+                        <div class="tiempo-horno">Tiempo de horneado: ${receta.tiempo}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function actualizarCantidades(contenedor, factor) {
+            const cantidades = contenedor.querySelectorAll('.ingrediente-cantidad');
+            cantidades.forEach(elemento => {
+                const original = parseFloat(elemento.dataset.original);
+                const nuevoValor = original * factor;
+                
+                if (elemento.textContent.includes('huevo')) {
+                    elemento.textContent = `${Math.round(nuevoValor * 100) / 100} unidades`;
+                } else {
+                    const kg = Math.floor(nuevoValor / 1000);
+                    const g = nuevoValor % 1000;
+                    elemento.textContent = kg > 0 ? `${kg}kg ${g}g` : `${g}g`;
+                }
+            });
+        }
+
+        function multiplicarIngredientes(boton) {
+            const contenedor = boton.closest('.receta-contenido');
+            const multiplicador = parseFloat(contenedor.querySelector('.multiplicador').value) || 1;
+            actualizarCantidades(contenedor, multiplicador);
+        }
+
+        function dividirIngredientes(boton) {
+            const contenedor = boton.closest('.receta-contenido');
+            const divisor = parseFloat(contenedor.querySelector('.fraccion').value) || 1;
+            actualizarCantidades(contenedor, 1/divisor);
+        }
+
+        // Inicializar la aplicación
+        document.getElementById('recetas-container').innerHTML = recetas.map(crearRecetaHTML).join('');
+
+        // Event listeners para despliegue
+        document.querySelectorAll('.receta-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const contenido = header.nextElementSibling;
+                contenido.style.display = contenido.style.display === 'none' ? 'block' : 'none';
+                header.querySelector('span').textContent = contenido.style.display === 'none' ? '▼' : '▲';
+            });
+        });
+    </script>
+</body>
+</html>
